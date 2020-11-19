@@ -2,14 +2,66 @@
     <head th:replace="library_includes :: frontend_libraries" />
     <body>
         
-        <div class="container" style="margin-top: 100px;">
+        <div class="container-fluid" style="margin-top: 20px;">
 
             <div>
-                <p style="font-size: large;">
-                    HELLO MY FRIEND!
+                <p class="text-headline">
+                    Neue Quizkarte erstellen:
                 </p>
             </div>
-
+            
+            <form>
+              <div class="form-group">
+                <a class="text-headline">Kategorie:</a> 
+                <select required id="dd_category" name="category" class="form-control">
+                  <option disabled selected value="">Bitte Kategorie wählen...</option>
+                  <option value="1">Kategorie 1: Recht auf Wasser</option>
+                  <option value="2">Kategorie 2: Recht auf Bier</option>
+                  <option value="3">Kategorie 3: Recht auf Urlaub</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <a class="text-headline">Fragestellung:</a> 
+                <textarea id="textarea" name="textarea" cols="40" rows="5" required="required" class="form-control"></textarea>
+              </div>
+              <div>
+                <a class="text-headline">Antwortmöglichkeiten:</a>
+                <p class="font-weight-light">(Korrekte Antwort auswählen)</p>
+              </div>
+                
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <input type="radio" name="rb_answer" id="rb_answer_1"  value="1" required="required" aria-label="Radio button for following text input">
+                    </div>
+                  </div>
+                  <input required type="text" class="form-control" aria-label="Text input with radio button">
+                </div>
+                
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <input type="radio" name="rb_answer" id="rb_answer_2" value="2" required="required" aria-label="Radio button for following text input">
+                    </div>
+                  </div>
+                    <input required type="text" class="form-control" aria-label="Text input with radio button">
+                </div>
+                
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <input type="radio" name="rb_answer" id="rb_answer_3" value="3" required="required" aria-label="Radio button for following text input">
+                    </div>
+                  </div>
+                  <input required type="text" class="form-control" aria-label="Text input with radio button">
+                </div>
+                
+              <div class="float-right">
+                <button type="button" class="btn btn-link">Zum Hauptmenü</button>
+                <button name="submit" type="submit" class="btn btn-success">Speichern</button>
+              </div>
+            </form>
+            
             <!-- Footer -->
             <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-bottom">
                 <ul class="navbar-nav mr-auto">
@@ -26,6 +78,6 @@
                 <ul class="navbar-nav ml-auto">
                 </ul>
             </nav>
-
+        </div>
     </body>
 </html>
