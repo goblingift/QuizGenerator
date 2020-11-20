@@ -11,15 +11,21 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  *
@@ -36,17 +42,22 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
+
     @Basic(optional = false)
-    @Column(name = "creationDate")
+    @Column(name = "creation_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
     private List<Quizcard> quizcardList;
 
@@ -61,6 +72,11 @@ public class Category implements Serializable {
         this.id = id;
         this.name = name;
         this.creationDate = creationDate;
+    }
+
+    @PrePersist
+    void createDefaultValues() {
+        this.creationDate = new Date();
     }
 
     public Integer getId() {
@@ -118,7 +134,7 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return "gift.goblin.quizgenerator.database.model.Category[ id=" + id + " ]";
+        return "Category{" + "id=" + id + ", name=" + name + ", creationDate=" + creationDate + '}';
     }
-    
+
 }

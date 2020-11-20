@@ -13,7 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.thymeleaf.util.StringUtils;
 
 /**
  *
@@ -31,10 +36,11 @@ public class CategoryController {
     private CategoryRepository categoryRepository;
     
     @GetMapping(value = {"/category"})
-    public String renderMainMenu(Model model) {
+    public String renderAddCategoriesPage(Model model) {
         
-        logger.info("User opened category-menu.");
+        logger.info("User opened category-editing-menu.");
         
+        model.addAttribute("newCategory", new Category());
         model.addAttribute("categories", loadCategories());
         model.addAttribute("build_artifact", buildProperties.getArtifact());
         model.addAttribute("build_version", buildProperties.getVersion());
@@ -47,5 +53,25 @@ public class CategoryController {
         return allCategories;
     }
     
+    @PostMapping(value = "/category/add")
+    public String addNewCategory(@ModelAttribute("newCategory") Category category, BindingResult bindingResult, Model model) {
+        
+        if (StringUtils.isEmptyOrWhitespace(category.getName())) {
+            logger.warn("No category name was entered- dont create em.");
+        } else {
+            logger.info("Will add new category: {}", category);
+            categoryRepository.save(category);
+        }
+        
+        return renderAddCategoriesPage(model);
+    }
     
+    @GetMapping(value = "/category/delete/{id}")
+    public String deleteCategory(@PathVariable("id") String id, Model model) {
+        logger.info("Will delete category: {}", id);
+        categoryRepository.deleteById(Integer.parseInt(id));
+        
+        return renderAddCategoriesPage(model);
+    }
+        
 }

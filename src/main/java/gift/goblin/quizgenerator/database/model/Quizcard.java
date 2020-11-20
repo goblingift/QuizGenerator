@@ -9,15 +9,21 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  *
@@ -39,29 +45,37 @@ public class Quizcard implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
     @Basic(optional = false)
     @Column(name = "question")
     private String question;
+    
     @Basic(optional = false)
     @Column(name = "answer1")
     private String answer1;
+    
     @Basic(optional = false)
     @Column(name = "answer2")
     private String answer2;
+    
     @Basic(optional = false)
     @Column(name = "answer3")
     private String answer3;
+    
     @Basic(optional = false)
-    @Column(name = "correctAnswer")
+    @Column(name = "correct_answer")
     private short correctAnswer;
+    
     @Basic(optional = false)
-    @Column(name = "creationDate")
+    @Column(name = "creation_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
-    @JoinColumn(name = "categoryId", referencedColumnName = "id")
+    
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Category categoryId;
 
@@ -80,6 +94,11 @@ public class Quizcard implements Serializable {
         this.answer3 = answer3;
         this.correctAnswer = correctAnswer;
         this.creationDate = creationDate;
+    }
+    
+    @PrePersist
+    void createDefaultValues() {
+        this.creationDate = new Date();
     }
 
     public Integer getId() {
@@ -168,7 +187,7 @@ public class Quizcard implements Serializable {
 
     @Override
     public String toString() {
-        return "gift.goblin.quizgenerator.database.model.Quizcard[ id=" + id + " ]";
+        return "Quizcard{" + "id=" + id + ", question=" + question + ", answer1=" + answer1 + ", answer2=" + answer2 + ", answer3=" + answer3 + ", correctAnswer=" + correctAnswer + ", creationDate=" + creationDate + ", categoryId=" + categoryId + '}';
     }
     
 }
