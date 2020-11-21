@@ -22,14 +22,16 @@
                 </div>
             </a>
             
-            <a href="/category">
-                <div class="jumbotron jumbotron-fluid">
-                  <div class="container">
-                    <h1 class="display-4">Kategorien</h1>
-                    <p class="lead">Hier klicken um Kategorien zu bearbeiten</p>
-                  </div>
-                </div>
-            </a>
+            <div th:if="${isAdmin}">
+                <a href="/category">
+                    <div class="jumbotron jumbotron-fluid">
+                      <div class="container">
+                        <h1 class="display-4">Kategorien</h1>
+                        <p class="lead">Hier klicken um Kategorien zu bearbeiten</p>
+                      </div>
+                    </div>
+                </a>
+            </div>
             
             <!-- Footer -->
             <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-bottom">

@@ -44,9 +44,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    
     @Autowired
     private UserDetailsService userDetailsService;
+
+    public static final String ROLE_PREFIX = "ROLE_";
+    public static final String ROLE_USER = "USER";
+    public static final String ROLE_ADMIN = "ADMIN";
+    public static final String USER_USERNAME = "user";
+    public static final String ADMIN_USERNAME = "superadmin_master";
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -102,18 +108,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user").password(passwordEncoder().encode("geheim123!")).roles("USER")
+                .withUser(USER_USERNAME).password(passwordEncoder().encode("geheim123!")).roles(ROLE_USER)
                 .and()
-                .withUser("admin").password(passwordEncoder().encode("supersecret123!")).roles("ADMIN");
+                .withUser(ADMIN_USERNAME).password(passwordEncoder().encode("supersecret123!")).roles(ROLE_ADMIN, ROLE_USER);
     }
 
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         List<UserDetails> userDetailsList = new ArrayList<>();
-        userDetailsList.add(User.withUsername("user").password(passwordEncoder().encode("password"))
-                .roles("USER").build());
-        userDetailsList.add(User.withUsername("admin").password(passwordEncoder().encode("secretpassword"))
-                .roles("ADMIN", "USER").build());
+        userDetailsList.add(User.withUsername(USER_USERNAME).password(passwordEncoder().encode("geheim123!"))
+                .roles(ROLE_USER).build());
+        userDetailsList.add(User.withUsername(ADMIN_USERNAME).password(passwordEncoder().encode("supersecret123!"))
+                .roles(ROLE_ADMIN, ROLE_USER).build());
 
         return new InMemoryUserDetailsManager(userDetailsList);
     }

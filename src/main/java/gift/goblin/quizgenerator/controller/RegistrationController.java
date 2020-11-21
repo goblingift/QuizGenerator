@@ -4,6 +4,7 @@
  */
 package gift.goblin.quizgenerator.controller;
 
+import gift.goblin.quizgenerator.WebSecurityConfig;
 import gift.goblin.quizgenerator.dto.UserCredentials;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -54,12 +55,19 @@ public class RegistrationController {
     public String registration(HttpSession session, @ModelAttribute("userForm") UserCredentials userForm, BindingResult bindingResult, Model model) {
 
         session.setAttribute("username", userForm.getUsername());
+        
         logger.info("Successful set username to session: {}", userForm.getUsername());
-
-        UserDetails userDetails = userDetailsManager.loadUserByUsername("user");
+        
+        UserDetails userDetails;
+        if (userForm.getUsername().equalsIgnoreCase(WebSecurityConfig.ADMIN_USERNAME)) {
+            userDetails = userDetailsManager.loadUserByUsername(WebSecurityConfig.ADMIN_USERNAME);
+        } else {
+            userDetails = userDetailsManager.loadUserByUsername("user");
+        }
+        
         Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
-
+        
         return "redirect:/home";
     }
 
