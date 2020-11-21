@@ -5,6 +5,8 @@
 package gift.goblin.quizgenerator.controller;
 
 import gift.goblin.quizgenerator.WebSecurityConfig;
+import static gift.goblin.quizgenerator.WebSecurityConfig.SESSION_FIELD_GAMEPROGRESS;
+import static gift.goblin.quizgenerator.WebSecurityConfig.SESSION_FIELD_USERNAME;
 import gift.goblin.quizgenerator.dto.UserCredentials;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -24,7 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import gift.goblin.quizgenerator.dto.GameProgress;
 
 /**
  *
@@ -54,8 +56,7 @@ public class RegistrationController {
     @PostMapping(path = "/submit")
     public String registration(HttpSession session, @ModelAttribute("userForm") UserCredentials userForm, BindingResult bindingResult, Model model) {
 
-        session.setAttribute("username", userForm.getUsername());
-        
+        session.setAttribute(SESSION_FIELD_GAMEPROGRESS, new GameProgress(userForm.getUsername()));
         logger.info("Successful set username to session: {}", userForm.getUsername());
         
         UserDetails userDetails;

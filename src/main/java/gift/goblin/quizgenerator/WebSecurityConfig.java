@@ -53,6 +53,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String USER_USERNAME = "user";
     public static final String ADMIN_USERNAME = "superadmin_master";
+    public static final String SESSION_FIELD_GAMEPROGRESS = "gameprogress";
+    public static final String SESSION_FIELD_USERNAME = "username";
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
