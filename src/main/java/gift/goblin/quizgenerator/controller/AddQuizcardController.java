@@ -45,7 +45,9 @@ public class AddQuizcardController {
         logger.info("User opened add-quizcard.");
 
         List<Category> categories = categoryRepository.findAll();
-        logger.debug("Found {} categories- will add them to available category dropdown.", categories.size());
+        logger.debug("Found {} categories- will sort them by name asc and add them to available category dropdown.", categories.size());
+        
+        categories.sort((Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
 
         model.addAttribute("newQuizcard", new Quizcard());
         model.addAttribute("categories", categories);
