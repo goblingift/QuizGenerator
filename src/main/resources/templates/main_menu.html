@@ -1,38 +1,68 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head th:replace="library_includes :: frontend_libraries" />
     <body>
-        
+
         <div class="container-fluid" style="margin-top: 20px;">
 
             <a href="/quizcard/create">
                 <div class="jumbotron jumbotron-fluid">
-                  <div class="container">
-                    <h1 class="display-4">Quizkarten erstellen</h1>
-                    <p class="lead">Hier klicken um neue Fragen zu erstellen</p>
-                  </div>
+                    <div class="container">
+                        <h1 class="display-4">Quizkarten erstellen</h1>
+                        <p class="lead">Hier klicken um neue Fragen zu erstellen</p>
+                    </div>
                 </div>
             </a>
-            
-            <a href="/game/question">
-                <div class="jumbotron jumbotron-fluid">
-                  <div class="container">
-                    <h1 class="display-4">Quiz starten</h1>
-                    <p class="lead">Hier klicken um das Spiel zu beginnen</p>
-                  </div>
-                </div>
-            </a>
-            
-            <div th:if="${isAdmin}">
-                <a href="/category">
+
+            <div th:if="${gameStarted}">
+                <a href="/game/question">
                     <div class="jumbotron jumbotron-fluid">
-                      <div class="container">
-                        <h1 class="display-4">Kategorien</h1>
-                        <p class="lead">Hier klicken um Kategorien zu bearbeiten</p>
-                      </div>
+                        <div class="container">
+                            <h1 class="display-4">Quiz starten</h1>
+                            <p class="lead">Hier klicken um das Spiel zu beginnen</p>
+                        </div>
                     </div>
                 </a>
             </div>
-            
+            <div th:if="${!gameStarted}">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h1 class="display-4" style="color: grey;">Quiz starten</h1>
+                        <p class="lead">Das Spiel wurde noch nicht aktiviert</p>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${isAdmin}">
+                <a href="/category">
+                    <div class="jumbotron jumbotron-fluid">
+                        <div class="container">
+                            <h1 class="display-4">Kategorien</h1>
+                            <p class="lead">Hier klicken um Kategorien zu bearbeiten</p>
+                        </div>
+                    </div>
+                </a>
+                <div th:if="${gameStarted}">
+                    <a href="/stop-game">
+                        <div class="jumbotron jumbotron-fluid">
+                            <div class="container">
+                                <h1 class="display-4">Spiel stoppen</h1>
+                                <p class="lead">Hier klicken um den Spielmodus zu beenden</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div th:if="${!gameStarted}">
+                    <a href="/start-game">
+                        <div class="jumbotron jumbotron-fluid">
+                            <div class="container">
+                                <h1 class="display-4">Spiel starten</h1>
+                                <p class="lead">Hier klicken um den Spielmodus zu aktivieren</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
             <!-- Footer -->
             <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-bottom">
                 <ul class="navbar-nav mr-auto">
