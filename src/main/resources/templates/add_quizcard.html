@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="library_includes :: frontend_libraries" />
+    <body>
+        
+        <div class="container-fluid" style="margin-top: 20px;">
+            
+            <div th:if="${display_success}" class="alert alert-success" id="success-alert" role="alert">
+              Quizkarte wurde erfolgreich gespeichert.
+            </div>
+            
+            <div>
+                <p class="text-headline">
+                    Neue Quizkarte erstellen:
+                </p>
+            </div>
+            
+            <form th:action="@{/quizcard/add}" th:object="${newQuizcard}" method="POST">
+              <div class="form-group">
+                <a class="text-headline">Kategorie:</a>
+                <select required id="dd_category" name="category" class="form-control" th:field="*{categoryId}">
+                  <option selected value="">Bitte Kategorie wählen...</option>
+                  <div th:each="actObject,iterStat : ${categories}">
+                        <option th:value="${actObject.id}" th:text="${actObject.name}"></option>
+                  </div>
+                </select>
+              </div>
+              <div class="form-group">
+                <a class="text-headline">Fragestellung:</a> 
+                <textarea id="textarea" name="textarea" th:field="*{question}" cols="40" rows="5" required="required" class="form-control"></textarea>
+              </div>
+              <div>
+                <a class="text-headline">Antwortmöglichkeiten:</a>
+                <p class="font-weight-light">(Korrekte Antwort auswählen)</p>
+              </div>
+                
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <input type="radio" name="rb_answer" id="rb_answer_1" th:field="*{correctAnswer}"  value="1" required="required" aria-label="Radio button for following text input">
+                    </div>
+                  </div>
+                  <input required type="text" th:field="*{answer1}" class="form-control" aria-label="Text input with radio button">
+                </div>
+                
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <input type="radio" name="rb_answer" id="rb_answer_2" th:field="*{correctAnswer}" value="2" required="required" aria-label="Radio button for following text input">
+                    </div>
+                  </div>
+                    <input required type="text" th:field="*{answer2}" class="form-control" aria-label="Text input with radio button">
+                </div>
+                
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <input type="radio" name="rb_answer" id="rb_answer_3" th:field="*{correctAnswer}" value="3" required="required" aria-label="Radio button for following text input">
+                    </div>
+                  </div>
+                  <input required type="text" th:field="*{answer3}" class="form-control" aria-label="Text input with radio button">
+                </div>
+                
+              <div class="float-right">
+                <a role="button" class="btn btn-link" href="/home">Zum Hauptmenü</a>
+                <button name="submit" type="submit" class="btn btn-success">Speichern</button>
+              </div>
+            </form>
+            
+        </div>
+    </body>
+    
+    <script th:inline="javascript">
+        $("#success-alert").fadeTo(3000, 500).slideUp(500, function(){
+            $("#success-alert").slideUp(500);
+        });
+    </script>
+</html>

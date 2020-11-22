@@ -1,0 +1,30 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="library_includes :: frontend_libraries" />
+    <body>
+        
+        <div class="container-fluid">
+            
+            <div th:if="${allQuizcards.size == 0}" class="alert alert-danger" id="success-alert" role="alert">
+              Keine Quizkarten gefunden!
+            </div>
+            
+            <div th:each="actObject,iterStat : ${allQuizcards}">
+                <div class="card mb-2">
+                  <h5 class="card-header" th:text="${actObject.question}"></h5>
+                  <div class="card-body">
+                    <a class="card-title" th:text="${actObject.answer1}"></a>
+                    <a class="card-title" th:text="${actObject.answer2}"></a>
+                    <a class="card-title" th:text="${actObject.answer3}"></a>
+                    <br>
+                    <a class="btn btn-lg btn-info" th:href="@{'/quizcard/delete/' + ${actObject.id}}">
+                        <i class="fas fa-trash-alt fa-lg"></i>
+                    </a>
+                  </div>
+                </div>
+            </div> 
+            <div class="float-left">
+                <a role="button" class="btn btn-link" href="/home">Zum Hauptmenü</a>
+            </div>
+        </div>
+    </body>
+</html>
