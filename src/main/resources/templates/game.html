@@ -17,12 +17,12 @@
                 </p>
             </div>
             
-            <form th:action="@{/game}" th:object="${answer}" method="POST">
+            <form id="form_quizcard" th:action="@{/game/answer}" th:object="${answer}" method="POST">
                 <input type="hidden" th:field="*{id}" th:value="*{id}">
               <div class="form-group">
                 <a class="text-headline">Kategorie:</a>
                 <select disabled id="dd_category" name="category" class="form-control">
-                  <option disabled selected th:value="${quizcard.id}" th:text="${quizcard.categoryId}"></option>
+                  <option disabled selected th:value="${quizcard.id}" th:text="${quizcard.categoryId.name}"></option>
                 </select>
               </div>
               <div class="form-group">
@@ -34,7 +34,7 @@
                 <p class="font-weight-light">(Korrekte Antwort auswählen)</p>
               </div>
                 
-                <div class="input-group mb-3">
+                <div class="input-group mb-3" id="div_answer_1">
                   <div class="input-group-prepend">
                     <div class="input-group-text">
                       <input type="radio" name="rb_answer" id="rb_answer_1" th:field="*{answer}"  value="1" required="required" aria-label="Radio button for following text input">
@@ -43,7 +43,7 @@
                   <input disabled type="text" th:value="${quizcard.answer1}" class="form-control" aria-label="Text input with radio button">
                 </div>
                 
-                <div class="input-group mb-3">
+                <div class="input-group mb-3" id="div_answer_2">
                   <div class="input-group-prepend">
                     <div class="input-group-text">
                       <input type="radio" name="rb_answer" id="rb_answer_2" th:field="*{answer}" value="2" required="required" aria-label="Radio button for following text input">
@@ -52,7 +52,7 @@
                     <input disabled type="text" th:value="${quizcard.answer2}" class="form-control" aria-label="Text input with radio button">
                 </div>
                 
-                <div class="input-group mb-3">
+                <div class="input-group mb-3" id="div_answer_3">
                   <div class="input-group-prepend">
                     <div class="input-group-text">
                       <input type="radio" name="rb_answer" id="rb_answer_3" th:field="*{answer}" value="3" required="required" aria-label="Radio button for following text input">
@@ -61,10 +61,17 @@
                   <input disabled type="text" th:value="${quizcard.answer3}" class="form-control" aria-label="Text input with radio button">
                 </div>
                 
-              <div class="float-right">
+              <div th:if="${!correct_answer}" id="div_submit" class="float-right">
                 <a role="button" class="btn btn-link" href="/home">Zum Hauptmenü</a>
-                <button name="submit" type="submit" class="btn btn-success">Speichern</button>
+                <button name="submit" type="submit" class="btn btn-success">Absenden</button>
               </div>
+              
+              <div th:if="${correct_answer}" id="div_new_quizcard" class="float-right">
+                <a role="button" class="btn btn-link" href="/game/question">
+                    <a href="/game/question" class="btn btn-success" role="button">Neue Frage ziehen</a>
+                </a>
+              </div>
+              
             </form>
             
             <!-- Footer -->
@@ -87,8 +94,19 @@
     </body>
     
     <script th:inline="javascript">
-        $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+        $("#success-alert").fadeTo(3000, 500).slideUp(500, function(){
             $("#success-alert").slideUp(500);
         });
+        $("#fail-alert").fadeTo(3000, 500).slideUp(500, function(){
+            $("#fail-alert").slideUp(500);
+        });
+        
+        var selectedAnswer = [[${answer.answer}]];
+        if ([[${correct_answer}]]) {
+            $('#div_answer_' + selectedAnswer).addClass("correct_answer");
+        } else if ([[${faulty_answer}]]) {
+            $('#div_answer_' + selectedAnswer).addClass("faulty_answer");
+        }
+        
     </script>
 </html>

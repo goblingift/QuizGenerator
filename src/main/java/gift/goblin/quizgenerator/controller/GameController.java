@@ -5,13 +5,11 @@
 package gift.goblin.quizgenerator.controller;
 
 import gift.goblin.quizgenerator.WebSecurityConfig;
-import static gift.goblin.quizgenerator.WebSecurityConfig.SESSION_FIELD_USERNAME;
 import gift.goblin.quizgenerator.bean.GameMaster;
 import gift.goblin.quizgenerator.database.model.Quizcard;
 import gift.goblin.quizgenerator.database.repo.QuizcardRepository;
 import gift.goblin.quizgenerator.dto.GameProgress;
 import gift.goblin.quizgenerator.dto.QuizcardAnswer;
-import gift.goblin.quizgenerator.dto.UserCredentials;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,39 +38,41 @@ public class GameController {
 
     @Autowired
     GameMaster gameMaster;
-    
+
     @Autowired
     QuizcardRepository quizcardRepository;
 
-    @GetMapping()
+    @GetMapping(path = "/question")
     public String renderAddCategoriesPage(HttpSession session, Model model, Authentication authentication) {
 
         GameProgress gameProgress = getGameProgressFromSession(session);
         logger.info("User {} started game.", gameProgress.getUsername());
-        
+
         Quizcard newCard = gameMaster.getNewQuizcard(gameProgress);
 
         model.addAttribute("quizcard", newCard);
+        model.addAttribute("correct_answer", false);
         model.addAttribute("answer", new QuizcardAnswer(newCard.getId()));
         model.addAttribute("build_artifact", buildProperties.getArtifact());
         model.addAttribute("build_version", buildProperties.getVersion());
         return "game";
     }
 
-    @PostMapping()
+    @PostMapping(path = "/answer")
     public String answerQuizcard(HttpSession session, @ModelAttribute("answer") QuizcardAnswer quizcardAnswer, Model model, Authentication authentication) {
         logger.info("ANSWERED ");
 
         GameProgress gameProgress = getGameProgressFromSession(session);
-        
+
         boolean correctAnswer = gameMaster.answerQuizcard(gameProgress, quizcardAnswer);
-        
+
         if (correctAnswer) {
             model.addAttribute("correct_answer", true);
         } else {
             model.addAttribute("faulty_answer", true);
+            model.addAttribute("correct_answer", false);
         }
-        
+
         model.addAttribute("answer", quizcardAnswer);
         model.addAttribute("quizcard", quizcardRepository.findById(quizcardAnswer.getId()).get());
         model.addAttribute("build_artifact", buildProperties.getArtifact());
