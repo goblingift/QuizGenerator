@@ -10,7 +10,7 @@
     </parent>
     <groupId>gift.goblin</groupId>
     <artifactId>quiz-generator</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>war</packaging>
     <name>QuizGenerator</name>
     <description>SpringBoot application to create quizcards and play with em!</description>
